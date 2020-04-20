@@ -7,7 +7,12 @@ metadata:
   namespace: {{.Values.namespace}}
 spec:
   progressDeadlineSeconds: 600
-  replicas: {{.Values.springboot.replicas}}
+{{- if eq .Values.namespace "prod" }}
+  replicas: "3" 
+{{- end }}
+{{- if eq .Values.namespace "dev" }}
+  replicas: "1"
+{{- end }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
