@@ -1,5 +1,5 @@
 name: "springboot"
-namespace: "dev"
+namespace: ""
 
 springboot:
   replicas: "1"

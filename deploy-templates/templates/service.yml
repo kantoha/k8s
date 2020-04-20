@@ -7,7 +7,6 @@ spec:
   selector:
     app: {{.Values.name}}
   type: ClusterIP
-  clusterIP: None
   ports:
     - name: http
       port: {{ .Values.springboot.port }}

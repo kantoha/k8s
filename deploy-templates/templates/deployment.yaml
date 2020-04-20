@@ -29,9 +29,13 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: password
-                name: {{.Values.mariaDb.secretName}}
+                name: {{.Values.springboot.secretName}}-{{.Values.namespace}}
         imagePullPolicy: Always
         name: "{{.Values.name}}"
+        command: 
+        - bash
+        - -c
+        - java -jar demo.jar; sleep 365d
         ports:
         - containerPort: 8080
           protocol: TCP
