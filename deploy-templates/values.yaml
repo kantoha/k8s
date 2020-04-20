@@ -1,0 +1,10 @@
+name: "springboot"
+namespace: "dev"
+
+springboot:
+  replicas: "1"
+  imageName: "kanton10062006/k8s"
+  imageTag: "latest"
+  port: "8080"
+  secretName: spring
+  password: test
