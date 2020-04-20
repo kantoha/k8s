@@ -8,10 +8,10 @@ metadata:
 spec:
   progressDeadlineSeconds: 600
 {{- if eq .Values.namespace "prod" }}
-  replicas: "3" 
+  replicas: 3 
 {{- end }}
 {{- if eq .Values.namespace "dev" }}
-  replicas: "1"
+  replicas: 1
 {{- end }}
   revisionHistoryLimit: 10
   selector:
