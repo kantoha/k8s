@@ -1,0 +1,9 @@
+name: "petclinic"
+namespace: "dev"
+
+petclinic:
+  replicas: "1"
+  imageName: "anthonydahanne"
+  imageTag: "spring-petclinic"
+  port: "8080"
+  password: test

@@ -1,0 +1,10 @@
+name: "mysql"
+namespace: "dev"
+
+mysql:
+  replicas: "1"
+  imageName: "mysql"
+  imageTag: "5.6"
+  port: "3306"
+  secretName: mysql-pass
+  password: test

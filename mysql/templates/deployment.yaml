@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{.Values.name}}
+  name: {{.Values.name}}
+  namespace: {{.Values.namespace}}
+spec:
+  progressDeadlineSeconds: 600
+{{- if eq .Values.namespace "prod" }}
+  replicas: 3
+{{- end }}
+{{- if eq .Values.namespace "dev" }}
+  replicas: 1
+{{- end }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{.Values.name}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: "{{.Values.name}}"
+    spec:
+      containers:
+      - image: "{{.Values.mysql.imageName}}:{{.Values.mysql.imageTag}}"
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: {{.Values.mysql.secretName}}-{{.Values.namespace}}
+        imagePullPolicy: Always
+        name: "{{.Values.name}}"
+        ports:
+        - containerPort: {{ .Values.mysql.port }}
+          protocol: TCP
+        resources:
+          requests:
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: config
+          mountPath: /etc/my.cnf
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: {{.Values.name}}
+      serviceAccountName: {{.Values.name}}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 420
+          name: {{.Values.name}}-configmap

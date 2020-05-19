@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
+To get the password for root user run:
+    export MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Values.Namespace }} {{.Values.mysql.secretName}}-{{.Values.namespace}} -o jsonpath="{.data.password}" | base64 --decode)
+
+To connect to your database use the following endpoint:
+    kubectl get svc --namespace {{ .Values.Namespace }} {{.Values.Name}} -o jsonpath="{.metadata.name}{":"}{.spec.ports.port}"
