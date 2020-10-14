@@ -76,6 +76,7 @@ spec:
         stage ('Compile') {
             steps {
                 container('maven') {
+                    sh("uname -a")
                     sh("mvn compile")
                 }
             }
