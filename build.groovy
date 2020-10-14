@@ -79,7 +79,7 @@ spec:
         stage ('Compile') {
             steps {
                 script {
-                    sh("cd ${workDir}")
+                    sh("mkdir -p ${workDir} && cd ${workDir}")
                     sh("mvn compile")
                 }
             }
@@ -87,7 +87,7 @@ spec:
         stage ('Build') {
             steps {
                 script {
-                    sh("cd ${workDir}")
+                    sh("mkdir -p ${workDir} && cd ${workDir}")
                     sh("mvn clean package -B -DskipTests=true")
                 }
             }
