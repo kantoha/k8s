@@ -72,6 +72,7 @@ spec:
                     sh("rm -rf ${workDir}*")
                     dir("${workDir}") {
                         git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
+                        sh("mvn compile")
                     }
                 }
             }
