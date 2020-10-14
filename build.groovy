@@ -68,7 +68,7 @@ spec:
         stage ('Checkout') {
             steps {
                 script {
-                    sh("rm -rf ${workDir}*")
+                    sh(script: "rm -rf ${workDir}*")
                     dir("${workDir}") {
                         git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
                     }
