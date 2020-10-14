@@ -33,7 +33,6 @@ def getRunningKanikoPods(podName, namespace) {
 pipeline {
   agent {
       kubernetes {
-          label "maven"
           defaultContainer "maven"
           yaml """
 apiVersion: v1
