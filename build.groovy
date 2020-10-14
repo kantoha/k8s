@@ -39,9 +39,9 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: maven
+  - name: jnlp
     image: kanton10062006/maven:jdk8
-    command: ["cat"]
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
     tty: true
     securityContext:
       runAsUser: 0
