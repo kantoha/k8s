@@ -80,7 +80,7 @@ spec:
             steps {
                 script {
                     dir("${workDir}") {
-                        sh (script: "mvn compile")
+                        sh("mvn compile")
                     }
                 }
             }
@@ -89,7 +89,7 @@ spec:
             steps {
                 script {
                     dir("${workDir}") {
-                        sh ("mvn clean package -B -DskipTests=true")
+                        sh("mvn clean package -B -DskipTests=true")
                     }
                 }
             }
@@ -98,7 +98,7 @@ spec:
             steps {
                 script {
                     dir("${workDir}") {
-                        sh ("kubectl get cm kaniko-template -o 'jsonpath={.data.kaniko\\.json}' -n ${ciNamespace} > kaniko.json")
+                        sh("kubectl get cm kaniko-template -o 'jsonpath={.data.kaniko\\.json}' -n ${ciNamespace} > kaniko.json")
                         sh """
                          kubectl patch -f kaniko.json --local=true --type json -p='[{"op": "replace", "path": "/spec/containers/0/args/0", "value": "--destination=kanton10062006/k8s:build-${env.BUILD_ID}" }]' -o json  > kaniko-container.json
                         """
