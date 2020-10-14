@@ -3,6 +3,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonBuilder
 
+def workDir = new File("/tmp/${RandomStringUtils.random(10, true, true)}")
 def branch = 'master'
 def credentialsId = 'git-sshkey'
 def gitHost = 'github.com'
@@ -33,7 +34,7 @@ def getRunningKanikoPods(podName, namespace) {
 pipeline {
   agent {
       kubernetes {
-          defaultContainer "maven"
+          label "maven"
           yaml """
 apiVersion: v1
 kind: Pod
@@ -64,59 +65,64 @@ spec:
     }
     options { skipDefaultCheckout true }
     stages {
-
         stage ('Checkout') {
             steps {
-                container('maven') {
-                    git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
+                script {
+                    sh("rm -rf ${workDir}*")
+                    dir("${workDir}") {
+                        git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
+                    }
                 }
             }
         }
-
         stage ('Compile') {
             steps {
-                container('maven') {
-                    sh("uname -a")
-                    sh("mvn compile")
+                script {
+                    dir("${workDir}") {
+                        sh("mvn compile")
+                    }
                 }
             }
         }
         stage ('Build') {
             steps {
                 script {
-                    sh("mvn clean package -B -DskipTests=true")
+                    dir("${workDir}") {
+                        sh("mvn clean package -B -DskipTests=true")
+                    }
                 }
             }
         }
         stage('Build Kaniko Image') {
             steps {
                 script {
-                    sh("kubectl get cm kaniko-template -o 'jsonpath={.data.kaniko\\.json}' -n ${ciNamespace} > kaniko.json")
-                    sh """
-                     kubectl patch -f kaniko.json --local=true --type json -p='[{"op": "replace", "path": "/spec/containers/0/args/0", "value": "--destination=kanton10062006/k8s:build-${env.BUILD_ID}" }]' -o json  > kaniko-container.json
-                    """
-                    sh """
-                     kubectl patch -f kaniko-container.json --local=true --type json -p='[{"op": "add", "path": "/spec/containers/0/args/1", "value": "--destination=kanton10062006/k8s:latest" }]' -o json  > kaniko-patched-container.json
-                    """
-                    sh "cat kaniko-patched-container.json"
-                    sh "kubectl apply -f kaniko-patched-container.json -n ${ciNamespace}"
+                    dir("${workDir}") {
+                        sh("kubectl get cm kaniko-template -o 'jsonpath={.data.kaniko\\.json}' -n ${ciNamespace} > kaniko.json")
+                        sh """
+                         kubectl patch -f kaniko.json --local=true --type json -p='[{"op": "replace", "path": "/spec/containers/0/args/0", "value": "--destination=kanton10062006/k8s:build-${env.BUILD_ID}" }]' -o json  > kaniko-container.json
+                        """
+                        sh """
+                         kubectl patch -f kaniko-container.json --local=true --type json -p='[{"op": "add", "path": "/spec/containers/0/args/1", "value": "--destination=kanton10062006/k8s:latest" }]' -o json  > kaniko-patched-container.json
+                        """
+                        sh "cat kaniko-patched-container.json"
+                        sh "kubectl apply -f kaniko-patched-container.json -n ${ciNamespace}"
 
-                    while (!getRunningInitKanikoPods(kanikoPodName, ciNamespace).contains("running")) {
-                        println("[JENKINS][DEBUG] Waiting for init container in Kaniko is started")
-                        sleep(5)
+                        while (!getRunningInitKanikoPods(kanikoPodName, ciNamespace).contains("running")) {
+                            println("[JENKINS][DEBUG] Waiting for init container in Kaniko is started")
+                            sleep(5)
+                        }
+
+                        sh "kubectl cp target/demo-0.0.1-SNAPSHOT.jar ${kanikoPodName}:/tmp/workspace -c init-kaniko"
+                        sh "kubectl cp Dockerfile ${kanikoPodName}:/tmp/workspace -c init-kaniko"
+
+                        while (!getRunningKanikoPods(kanikoPodName, ciNamespace).contains("Succeeded")) {
+                            println("[JENKINS][DEBUG] Waiting for container in Kaniko is finished.")
+                            sleep(5)
+                        }
+
+                        println("[JENKINS][DEBUG] Delete ${kanikoPodName} in namespace ${ciNamespace}")
+                        sh "kubectl delete pod ${kanikoPodName} -n ${ciNamespace}"
                     }
-
-                    sh "kubectl cp target/demo-0.0.1-SNAPSHOT.jar ${kanikoPodName}:/tmp/workspace -c init-kaniko"
-                    sh "kubectl cp Dockerfile ${kanikoPodName}:/tmp/workspace -c init-kaniko"
-
-                    while (!getRunningKanikoPods(kanikoPodName, ciNamespace).contains("Succeeded")) {
-                        println("[JENKINS][DEBUG] Waiting for container in Kaniko is finished.")
-                        sleep(5)
-                    }
-
-                    println("[JENKINS][DEBUG] Delete ${kanikoPodName} in namespace ${ciNamespace}")
-                    sh "kubectl delete pod ${kanikoPodName} -n ${ciNamespace}"
-
                 }
             }
         }
