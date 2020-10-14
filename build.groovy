@@ -69,11 +69,7 @@ spec:
                 script {
                     sh "rm -rf ${workDir}*"
                     dir("${workDir}") {
-                        checkout([$class                           : 'GitSCM', branches: [[name: "${branch}"]],
-                                  doGenerateSubmoduleConfigurations: false, extensions: [],
-                                  submoduleCfg                     : [],
-                                  userRemoteConfigs                : [[credentialsId: "${credentialsId}",
-                                                                       url          : "${cloneUrl}"]]])
+                        git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
                     }
                 }
             }
