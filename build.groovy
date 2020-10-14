@@ -40,7 +40,7 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: maven
+  - name: jnlp
     image: kanton10062006/maven:jdk8
     command: ["cat"]
     tty: true
