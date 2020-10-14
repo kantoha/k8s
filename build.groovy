@@ -61,8 +61,9 @@ spec:
     hostPath:
       path: /var/run/docker.sock
 """
-      }
-  }
+        }
+    }
+    options { skipDefaultCheckout true }
     stages {
         stage ('Checkout') {
             steps {
