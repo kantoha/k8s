@@ -35,33 +35,31 @@ pipeline {
   agent {
       kubernetes {
           label "maven"
-          defaultContainer "tools"
+          defaultContainer "maven"
           yaml """
 apiVersion: v1
 kind: Pod
 metadata:
 spec:
-containers:
-- name: tools
-  image: kanton10062006/maven:jdk8
-  command: ["cat"]
-  tty: true
-  volumeMounts:
+  containers:
+  - name: maven
+    image: kanton10062006/maven:jdk8
+    command: ["cat"]
+    tty: true
+    volumeMounts:
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
+    resources:
+      limits:
+        cpu: "512m"
+        memory: 512Mi
+      requests:
+        cpu: 256m
+        memory: 512Mi
+  volumes:
   - name: docker-sock
-    mountPath: /var/run/docker.sock
-  resources:
-    limits:
-      cpu: "512m"
-      memory: 512Mi
-    requests:
-      cpu: 256m
-      memory: 512Mi
-nodeSelector:
-  kops.k8s.io/instancegroup: services
-volumes:
-- name: docker-sock
-  hostPath:
-    path: /var/run/docker.sock
+    hostPath:
+      path: /var/run/docker.sock
 """
       }
   }
