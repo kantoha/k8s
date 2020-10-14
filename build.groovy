@@ -69,7 +69,7 @@ spec:
         stage ('Checkout') {
             steps {
                 script {
-                    sh(script: "rm -rf ${workDir}*")
+                    sh("rm -rf ${workDir}*")
                     dir("${workDir}") {
                         git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
                     }
@@ -80,7 +80,7 @@ spec:
             steps {
                 script {
                     dir("${workDir}") {
-                        sh (script:"mvn compile")
+                        sh (script: "mvn compile")
                     }
                 }
             }
