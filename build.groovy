@@ -69,9 +69,7 @@ spec:
         stage ('Checkout') {
             steps {
                 container('maven') {
-                    script {
-                        git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
-                    }
+                    git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
                 }
             }
         }
@@ -79,9 +77,7 @@ spec:
         stage ('Compile') {
             steps {
                 container('maven') {
-                    script {
-                        sh("mvn compile")
-                    }
+                    sh("mvn compile")
                 }
             }
         }
