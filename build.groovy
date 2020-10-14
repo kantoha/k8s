@@ -45,6 +45,8 @@ spec:
     image: kanton10062006/maven:jdk8
     command: ["cat"]
     tty: true
+    securityContext:
+      runAsUser: 0
     volumeMounts:
     - name: docker-sock
       mountPath: /var/run/docker.sock
