@@ -72,7 +72,6 @@ spec:
                     sh("rm -rf ${workDir}*")
                     dir("${workDir}") {
                         git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
-                        sh("mvn compile")
                     }
                 }
             }
@@ -80,18 +79,16 @@ spec:
         stage ('Compile') {
             steps {
                 script {
-                    dir("${workDir}") {
-                        sh("mvn compile")
-                    }
+                    sh("cd ${workDir}")
+                    sh("mvn compile")
                 }
             }
         }
         stage ('Build') {
             steps {
                 script {
-                    dir("${workDir}") {
-                        sh("mvn clean package -B -DskipTests=true")
-                    }
+                    sh("cd ${workDir}")
+                    sh("mvn clean package -B -DskipTests=true")
                 }
             }
         }
