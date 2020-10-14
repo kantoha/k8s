@@ -10,7 +10,7 @@ def gitHost = 'github.com'
 def gitProjectName = 'k8s'
 def gitGroupName = 'kantoha'
 def cloneUrl = "git@${gitHost}:${gitGroupName}/${gitProjectName}.git"
-def ciNamespace = 'cicd'
+def ciNamespace = 'default'
 def kanikoPodName = 'kaniko'
 
 def getRunningInitKanikoPods(podName, namespace) {
