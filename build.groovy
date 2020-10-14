@@ -39,12 +39,12 @@ pipeline {
           yaml """
 apiVersion: v1
 kind: Pod
-metadata:
 spec:
   containers:
   - name: maven
     image: kanton10062006/maven:jdk8
     command: ["cat"]
+    tty: true
     volumeMounts:
     - name: docker-sock
       mountPath: /var/run/docker.sock
