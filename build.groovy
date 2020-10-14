@@ -65,18 +65,20 @@ spec:
     }
     options { skipDefaultCheckout true }
     stages {
-        container('maven') {
-            stage ('Checkout') {
-                steps {
+
+        stage ('Checkout') {
+            steps {
+                container('maven') {
                     script {
                         git url: "${cloneUrl}", branch: "${branch}", credentialsId: "${credentialsId}"
                     }
                 }
             }
         }
-        container('maven') {
-            stage ('Compile') {
-                steps {
+
+        stage ('Compile') {
+            steps {
+                container('maven') {
                     script {
                         sh("mvn compile")
                     }
