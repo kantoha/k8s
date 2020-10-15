@@ -70,7 +70,7 @@ spec:
 }
 
 def deployHelm(namespace, appName) {
-    list = sh(script: "helm list", returnStdout: true).trim()
+    list = sh(script: "helm list -n ${namespace}", returnStdout: true).trim()
     if (list.contains("${namespace}-${appName}")) {
         sh """
            helm upgrade --force ${namespace}-${appName}  \
