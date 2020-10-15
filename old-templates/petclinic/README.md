@@ -1,1 +1,0 @@
-Simple petclinic chart chart
