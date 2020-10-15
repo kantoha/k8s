@@ -74,7 +74,6 @@ def deployHelm(namespace, appName) {
     if (list.contains("${namespace}-${appName}")) {
         sh """
            helm upgrade --force ${namespace}-${appName}  \
-                        --wait --timeout=300 \
                         --namespace ${namespace} \
                         --set name=${appName} \
                         --set namespace=${namespace} \
@@ -83,8 +82,7 @@ def deployHelm(namespace, appName) {
            """
     } else {
         sh """
-           helm install --name=${namespace}-${appName}  \
-                        --wait --timeout=300 \
+           helm install ${namespace}-${appName}  \
                         --namespace ${namespace} \
                         --set name=${appName} \
                         --set namespace=${namespace} \
