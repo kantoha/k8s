@@ -38,6 +38,8 @@ spec:
         imagePullPolicy: Always
         name: "{{.Values.name}}"
         command:
+        - bash
+        - -c
         - java -Dserver.port=8080 -jar demo.jar; sleep 365d
         ports:
         - containerPort: 8080
