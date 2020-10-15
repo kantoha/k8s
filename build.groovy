@@ -112,7 +112,7 @@ spec:
                             sleep(5)
                         }
 
-                        sh "kubectl cp target/demo-0.0.1-SNAPSHOT.jar ${kanikoPodName}:/tmp/workspace -c init-kaniko"
+                        sh "kubectl cp target/petclinic.war ${kanikoPodName}:/tmp/workspace -c init-kaniko"
                         sh "kubectl cp Dockerfile ${kanikoPodName}:/tmp/workspace -c init-kaniko"
 
                         while (!getRunningKanikoPods(kanikoPodName, ciNamespace).contains("Succeeded")) {
