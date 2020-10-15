@@ -39,10 +39,6 @@ CMD ["catalina.sh", "run"]
 # end of tomcat stuff
 
 # build and add the war
-COPY . /usr/src/app/
+COPY target/petclinic.war /usr/local/tomcat/webapps/
 
 # tests are ignored since they rely on a mysql database now...
-RUN cd /usr/src/app/ \
-  && mvn clean install -DskipTests \
-  && cp target/petclinic.war /usr/local/tomcat/webapps/ \
-  && rm -rf target/
