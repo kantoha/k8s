@@ -77,7 +77,6 @@ def deployHelm(namespace, appName) {
                         --namespace ${namespace} \
                         --set name=${appName} \
                         --set namespace=${namespace} \
-                        --set petclinic.secretName=spring-${namespace} \
                         deploy-templates
            """
     } else {
@@ -86,7 +85,6 @@ def deployHelm(namespace, appName) {
                         --namespace ${namespace} \
                         --set name=${appName} \
                         --set namespace=${namespace} \
-                        --set petclinic.secretName=spring-${namespace} \
                         deploy-templates
            """
     }
