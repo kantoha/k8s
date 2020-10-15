@@ -28,13 +28,13 @@ spec:
         app: "{{.Values.name}}"
     spec:
       containers:
-      - image: "{{.Values.springboot.imageName}}:{{.Values.springboot.imageTag}}"
+      - image: "{{.Values.petclinic.imageName}}:{{.Values.petclinic.imageTag}}"
         env:
           - name: JASPERREPORTS_DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: {{.Values.springboot.secretName}}-{{.Values.namespace}}
+                name: {{.Values.petclinic.secretName}}-{{.Values.namespace}}
         imagePullPolicy: Always
         name: "{{.Values.name}}"
         command: ["java", "-jar", "demo.jar"]

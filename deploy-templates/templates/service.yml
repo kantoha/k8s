@@ -9,6 +9,6 @@ spec:
   type: LoadBalancer
   ports:
     - name: http
-      port: {{ .Values.springboot.port }}
-      targetPort: {{.Values.springboot.port}}
+      port: {{ .Values.petclinic.port }}
+      targetPort: {{.Values.petclinic.port}}
       protocol: TCP
