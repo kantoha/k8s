@@ -10,7 +10,38 @@ def cloneUrl = "git@${gitHost}:${gitGroupName}/${gitProjectName}.git"
 def appName = 'spring'
 def namespace = params.ENV
 pipeline {
-    agent { label 'master' }
+  agent {
+      kubernetes {
+          label "maven"
+          yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: jnlp
+    image: kanton10062006/maven:helm
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+    tty: true
+    securityContext:
+      runAsUser: 0
+    volumeMounts:
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
+    resources:
+      limits:
+        cpu: "512m"
+        memory: 512Mi
+      requests:
+        cpu: 256m
+        memory: 512Mi
+  volumes:
+  - name: docker-sock
+    hostPath:
+      path: /var/run/docker.sock
+"""
+        }
+    }
+    options { skipDefaultCheckout true }
     stages {
         stage ('Checkout') {
             steps {

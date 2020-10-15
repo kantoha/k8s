@@ -41,7 +41,7 @@ kind: Pod
 spec:
   containers:
   - name: jnlp
-    image: kanton10062006/maven:jdk8
+    image: kanton10062006/maven:helm
     args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
     tty: true
     securityContext:
