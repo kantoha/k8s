@@ -40,7 +40,7 @@ spec:
         command:
         - bash
         - -c
-        - java -jar demo.jar; sleep 365d
+        - java -Dserver.port=8080 -jar demo.jar; sleep 365d
         ports:
         - containerPort: 8080
           protocol: TCP
