@@ -1,10 +1,8 @@
-name: "springboot"
+name: "petclinic"
 namespace: ""
 
-springboot:
+petclinic:
   replicas: "1"
   imageName: "kanton10062006/k8s"
   imageTag: "latest"
   port: "8080"
-  secretName: spring
-  password: test

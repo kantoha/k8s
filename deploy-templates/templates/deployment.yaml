@@ -37,10 +37,7 @@ spec:
                 name: {{.Values.springboot.secretName}}-{{.Values.namespace}}
         imagePullPolicy: Always
         name: "{{.Values.name}}"
-        command:
-        - bash
-        - -c
-        - java -Dserver.port=8080 -jar demo.jar; sleep 365d
+        command: ["java", "-jar", "demo.jar"]
         ports:
         - containerPort: 8080
           protocol: TCP
