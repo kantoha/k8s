@@ -29,12 +29,6 @@ spec:
     spec:
       containers:
       - image: "{{.Values.petclinic.imageName}}:{{.Values.petclinic.imageTag}}"
-        env:
-          - name: JASPERREPORTS_DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: password
-                name: {{.Values.petclinic.secretName}}-{{.Values.namespace}}
         imagePullPolicy: Always
         name: "{{.Values.name}}"
         command: ["java", "-jar", "demo.jar"]
