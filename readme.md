@@ -1,1 +1,2 @@
 # petclinic
+trigger
