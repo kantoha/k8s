@@ -75,7 +75,7 @@ spec:
                 }
             }
         }
-        stage ('Compile') {
+        stage ('Tests') {
             steps {
                 script {
                     dir("${workDir}") {
